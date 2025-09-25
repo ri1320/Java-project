@@ -1,0 +1,36 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class SumOfIntegers {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // List to hold Integer objects (autoboxing will happen automatically)
+        ArrayList<Integer> numbers = new ArrayList<>();
+
+        System.out.println("Enter integers separated by spaces:");
+        String input = sc.nextLine();
+
+        // Split input by spaces
+        String[] values = input.split(" ");
+
+        // Convert each string to Integer and add to the list
+        for (String val : values) {
+            // String parsing to int, then autoboxing to Integer
+            Integer num = Integer.parseInt(val);
+            numbers.add(num);  
+        }
+
+        // Calculate sum using unboxing (Integer -> int automatically)
+        int sum = 0;
+        for (Integer num : numbers) {
+            sum += num;   // Unboxing occurs here
+        }
+
+        // Display results
+        System.out.println("You entered: " + numbers);
+        System.out.println("Sum of integers: " + sum);
+
+        sc.close();
+    }
+}
