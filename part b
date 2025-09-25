@@ -2,47 +2,51 @@ import java.io.*;
 
 // Student class implementing Serializable
 class Student implements Serializable {
-    private static final long serialVersionUID = 1L;  // Recommended for Serializable classes
+    private static final long serialVersionUID = 1L;
     
     private int studentID;
     private String name;
     private String grade;
 
-    // Constructor
     public Student(int studentID, String name, String grade) {
         this.studentID = studentID;
         this.name = name;
         this.grade = grade;
     }
 
-    // toString method for easy printing
     @Override
     public String toString() {
         return "Student ID: " + studentID + ", Name: " + name + ", Grade: " + grade;
     }
 }
 
-public class StudentSerializationDemo {
+// Main class with main method
+public class Main {
     public static void main(String[] args) {
-        String filename = "student.ser";  // File where object will be stored
-
         // Create a Student object
         Student s1 = new Student(101, "Ravi Kumar", "A");
 
-        // --- Serialization ---
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
+        // --- Serialization to memory ---
+        byte[] serializedData = null;
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream out = new ObjectOutputStream(bos)) {
             out.writeObject(s1);
-            System.out.println("Student object serialized and saved to " + filename);
+            serializedData = bos.toByteArray();
+            System.out.println("Student object serialized in memory.");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // --- Deserialization ---
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
-            Student deserializedStudent = (Student) in.readObject();
-            System.out.println("Deserialized Student: " + deserializedStudent);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        // --- Deserialization from memory ---
+        if (serializedData != null) {
+            try (ByteArrayInputStream bis = new ByteArrayInputStream(serializedData);
+                 ObjectInputStream in = new ObjectInputStream(bis)) {
+                Student deserializedStudent = (Student) in.readObject();
+                System.out.println("Deserialized Student: " + deserializedStudent);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
+
